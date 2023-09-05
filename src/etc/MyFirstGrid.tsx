@@ -14,13 +14,23 @@ const MyFirstGrid = () => {
     const [type, setType] = useState<"input" | "image">("input");
     const [isDropping, setIsDropping] = useState(false);
 
-    //onDrop: 그리드 항목을 드래그해서 그리드에 놓을 때 호출되는 함수
+    //onDrop 함수는 드래그한 요소를 놓았을 때 호출되는 함수입니다.
+    //currentLayout은 현재 그리드의 레이아웃 정보를 담고 있습니다.
+    //layoutItem은 드래그한 요소의 레이아웃 정보를 담고 있습니다.
+    //event는 이벤트 객체입니다.
     const onDrop = useCallback((currentLayout, layoutItem, _event) => {
             console.log("onDrop");
-            setLayout([...layout, {...layoutItem, i: index.toString(), type: type, w: type ==="image" ? 2 : 1, minW: null, maxW: null}]);
+            setLayout([...layout, {
+                ...layoutItem,
+                i: index.toString(),
+                type: type,
+                w: type === "image" ? 2 : 1,
+                minW: null,
+                maxW: null
+            }]);
             setIndex(index + 1);
         }
-    ,[index, layout, type]);
+        , [index, layout, type]);
 
     const onLayoutChange = useCallback((currentLayout) => {
         console.log("onLayoutChange", currentLayout);
@@ -28,15 +38,14 @@ const MyFirstGrid = () => {
         const newHeight = document?.querySelector(".react-grid-layout")?.offsetHeight;
         console.log("newHeight", newHeight);
 
-        if (newHeight > 560)
-        {
+        if (newHeight > 560) {
             console.log("newHeight!!", newHeight);
             const prevLayout = [...layout];
             // setLayout([
             //     {i: 0, x: 0, y: 0, w: 1, h: 1, minW: null, maxW: null, type: "input"}
             // ])
             setLayout(prevLayout);
-            return ;
+            return;
         }
         if (!isDropping) {
             console.log("isDropping", isDropping);
@@ -62,7 +71,7 @@ const MyFirstGrid = () => {
                         margin: 10
                     }}
                     className="droppable-element"
-                    draggable={true}
+                    draggable={true} //true면 드래그 가능
                     unselectable="on"
                     onDragStart={e => {
                         console.log("onDragStart!!!!!!!");
@@ -103,7 +112,7 @@ const MyFirstGrid = () => {
                     />
                 </div>
             </div>
-            <div style={{backgroundColor: "gray", padding: 10, width: 600,  maxHeight: 560}}>
+            <div style={{backgroundColor: "gray", padding: 10, width: 600, maxHeight: 560}}>
                 <GridLayout
                     className="layout"
                     cols={12} //그리드의 열 수
